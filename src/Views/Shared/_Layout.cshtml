@@ -8,6 +8,7 @@
   @Html.ThemeHead()
   @Html.ThemeStyle("~/styles/weavy.scss", htmlAttributes: new { data_turbolinks_track = "reload" })
   @RenderSection("styles", required: false)
+  <link href="https://fonts.googleapis.com/css?family=Montserrat|Open+Sans" rel="stylesheet"> 
   @if (WeavyRequestContext.Current.Browser.Browser == "IE") {
     @Bundler.Scripts("~/scripts/ie.bundle", htmlAttributes: new { data_turbolinks_track = "reload" })
   }

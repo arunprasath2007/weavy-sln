@@ -20,6 +20,8 @@ namespace Wvy.Models
 
         public string Referrer { get; set; }
 
+        public int AppId { get; set; }
+
         public List<IndexDataDto> SearchResults { get; set; }
     }
 }

@@ -5,18 +5,90 @@
 }
 
 
+@section navbar_middle {
+    
+}
 
-<div class="container-fluid my-3">
-    <a href="@Model.Referrer">Prev page</a>
+@section navbar_secondary {
 
-    Search Results for @Model.Query
+}
+<a class="btn btn-icon btn-link px-0 d-standalone" href="@Model.Referrer" data-turbolinks="false">
+    <svg class="i">
+        <use xlink:href="#arrow-left"></use>
+    </svg>
+    <span>Back</span>
+</a>
 
-    <ul>
-        @foreach(var result in Model.SearchResults)
-        {
-            <li>@result.SearchText</li>
-        }
-    </ul>
+<div class="container text-center my-4">
+    <div class="mb-4 d-flex flex-column align-items-center mx-auto align-self-center">
+        @Html.IconImg(32)
+    </div>
+    <form action="/apps/@Model.AppId/df8beb98-7dd5-4c40-93bc-3da22d03d616/search" method="get" data-turboform>
+        <div class="form-group" role="search">
+            <input class="form-control" type="search" name="q" value="@Model.Query" placeholder="Search" />
+            @if (Model.Query.IsNullOrEmpty())
+            {
+                <button type="submit" class="btn btn-icon">@Html.SvgIcon("magnify")</button>
+            }
+            else
+            {
+                <a href="/apps/@Model.AppId/df8beb98-7dd5-4c40-93bc-3da22d03d616/search" class="btn btn-icon">@Html.SvgIcon("close")</a>
+            }
+        </div>
+    </form>
 </div>
+
+<div class="container text-center my-4">
+    @if (Model.SearchResults.Count > 0)
+    {
+        <nav class="nav nav-tabs mb-4">
+            <a href="#nav-tab-everything" class="nav-link active">Everything</a>
+            <a href="#nav-tab-posts" class="nav-link">Posts</a>
+            <a href="#nav-tab-comments" class="nav-link">Comments</a>
+        </nav>
+    }
+
+    @if (Model.SearchResults.Count == 0 && !string.IsNullOrEmpty(Model.Query))
+    {
+        <p>Your search - <strong>@Model.Query</strong> - did not match anything.</p>
+        <p>Suggestions:</p>
+        <ul>
+            <li>Make sure that all words are spelled correctly.</li>
+            <li>Try different keywords.</li>
+            <li>Try more general keywords.</li>
+            <li>Try fewer keywords.</li>
+        </ul>
+    }
+    <div id="nav-tab-everything">
+        <ul>
+            @foreach (var result in Model.SearchResults)
+            {
+                <li>@result.SearchText</li>
+            }
+        </ul>
+    </div>
+    <div id="nav-tab-posts">
+        <ul>
+            @foreach (var result in Model.SearchResults.Where(x => x.IndexEntityType == Doplace.Dto.IndexEntityType.Post))
+            {
+                <li>@result.SearchText</li>
+            }
+        </ul>
+    </div>
+    <div id="nav-tab-comments">
+        <ul>
+            @foreach (var result in Model.SearchResults.Where(x => x.IndexEntityType == Doplace.Dto.IndexEntityType.Comment))
+            {
+                <li>@result.SearchText</li>
+            }
+        </ul>
+    </div>
+</div>
+
+@section footer {
+
+}
+
+
 
 

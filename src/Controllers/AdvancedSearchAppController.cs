@@ -19,14 +19,15 @@ namespace Wvy.Controllers
 
         [HttpGet]
         [Route("search")]
-        public ActionResult Search(string q)
+        public ActionResult Search(int id, string q)
         {
-            var url = Request.UrlReferrer.AbsoluteUri;
+            var url = Request.UrlReferrer?.AbsoluteUri ?? "/";
             var searchService = new LuceneSearchService(HostingEnvironment.MapPath("/"));
             var results = searchService.Search(q).ToList();
 
             return View(new AdvancedSearch
             {
+                AppId = id,
                 Query = q,
                 Referrer = url,
                 SearchResults = results

@@ -1,0 +1,22 @@
+﻿
+@model Wvy.Models.AdvancedSearch
+@{
+    Title = "Search Results";
+}
+
+
+
+<div class="container-fluid my-3">
+    <a href="@Model.Referrer">Prev page</a>
+
+    Search Results for @Model.Query
+
+    <ul>
+        @foreach(var result in Model.SearchResults)
+        {
+            <li>@result.SearchText</li>
+        }
+    </ul>
+</div>
+
+

@@ -23,7 +23,7 @@ namespace Doplace.Repository
 		                INNER JOIN dbo.Spaces s ON p.SpaceId = s.Id
 	                WHERE p.ModifiedAt >= @startTime AND p.ModifiedAt < @endTime
                 UNION ALL
-                SELECT c.Id, c.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Name] AS 'Space'
+                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Name] AS 'Space'
 	                FROM dbo.Comments c
 		                INNER JOIN dbo.Spaces s ON c.SpaceId = s.Id
 	                WHERE c.ModifiedAt >= @startTime AND c.ModifiedAt < @endTime", 

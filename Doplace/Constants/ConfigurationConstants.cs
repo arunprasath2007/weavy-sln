@@ -1,4 +1,5 @@
 ﻿using System.Configuration;
+using Weavy.Core.Repos;
 
 namespace Doplace.Constants
 {
@@ -6,6 +7,6 @@ namespace Doplace.Constants
     {
         public static string LUCENE_INDEX_FOLDER { get { return "lucene_index"; } }
 
-        public static string CONNECTION_STRING { get { return ConfigurationManager.ConnectionStrings["defaultConnection"].ConnectionString; } }
+        public static string CONNECTION_STRING { get { return SqlHelper.ConnectionString; } }
     }
 }

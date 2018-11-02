@@ -38,13 +38,13 @@
     </form>
 </div>
 
-<div class="container text-center my-4">
+<div class="container my-4">
     @if (Model.SearchResults.Count > 0)
     {
         <nav class="nav nav-tabs mb-4">
             <a href="#nav-tab-everything" class="nav-link active">Everything</a>
-            <a href="#nav-tab-posts" class="nav-link">Posts</a>
-            <a href="#nav-tab-comments" class="nav-link">Comments</a>
+            <a href="#nav-tab-posts" class="nav-link disabled">Posts</a>
+            <a href="#nav-tab-comments" class="nav-link disabled">Comments</a>
         </nav>
     }
 
@@ -59,30 +59,15 @@
             <li>Try fewer keywords.</li>
         </ul>
     }
-    <div id="nav-tab-everything">
-        <ul>
-            @foreach (var result in Model.SearchResults)
-            {
-                <li>@result.SearchText</li>
-            }
-        </ul>
-    </div>
-    <div id="nav-tab-posts">
-        <ul>
-            @foreach (var result in Model.SearchResults.Where(x => x.IndexEntityType == Doplace.Dto.IndexEntityType.Post))
-            {
-                <li>@result.SearchText</li>
-            }
-        </ul>
-    </div>
-    <div id="nav-tab-comments">
-        <ul>
-            @foreach (var result in Model.SearchResults.Where(x => x.IndexEntityType == Doplace.Dto.IndexEntityType.Comment))
-            {
-                <li>@result.SearchText</li>
-            }
-        </ul>
-    </div>
+    
+</div>
+<div id="nav-tab-everything" class="container my-4">
+    <ul>
+        @foreach (var result in Model.SearchResults)
+        {
+            <li>@result.IndexEntityType.ToString() : @result.SearchText</li>
+        }
+    </ul>
 </div>
 
 @section footer {

@@ -1,4 +1,5 @@
-﻿using Doplace.Dto;
+﻿using Doplace.Constants;
+using Doplace.Dto;
 using Doplace.Helpers;
 using Doplace.Repository;
 using Lucene.Net.Analysis.Standard;
@@ -46,8 +47,10 @@ namespace Doplace.Services.Lucene
         public void CreateIndex(DateTime startTime, DateTime endTime)
         {
             FileHelper.CreateFolder(_rootPath, _luceneFolderName);
-            var dto = _luceneRepository.GetIndexData(startTime, endTime);
-            UpdateIndex(dto);
+            var dataToBeRemovedDto = _luceneRepository.GetDeletedIndexData(startTime, endTime);
+            RemoveFromIndex(dataToBeRemovedDto);
+            var dataToBeUpdatedDto = _luceneRepository.GetModifiedIndexData(startTime, endTime);
+            UpdateIndex(dataToBeUpdatedDto);
         }
 
         public void RemoveFromIndex(IndexDataDto dto)
@@ -64,8 +67,8 @@ namespace Doplace.Services.Lucene
                 // remove older index entry
                 foreach (var item in dto)
                 {
-                    var idQuery = new TermQuery(new Term("Id", item.Id.ToString()));
-                    var entityTypeQuery = new TermQuery(new Term("IndexEntityType", item.IndexEntityType.ToString()));
+                    var idQuery = new TermQuery(new Term(SearchConstants.FIELD_ID, item.Id.ToString()));
+                    var entityTypeQuery = new TermQuery(new Term(SearchConstants.FIELD_INDEX_ENTITY_TYPE, item.IndexEntityType.ToString()));
                     writer.DeleteDocuments(idQuery, entityTypeQuery);
                 }
 
@@ -94,10 +97,10 @@ namespace Doplace.Services.Lucene
             var doc = new Document();
 
             // add lucene fields mapped to db fields
-            doc.Add(new Field("Id", dto.Id.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("SearchText", dto.SearchText, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field("IndexEntityType", dto.IndexEntityType.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field("Space", dto.Space, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_ID, dto.Id.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_SEARCH_TEXT, dto.SearchText, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_INDEX_ENTITY_TYPE, dto.IndexEntityType.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_SPACE, dto.Space, Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             // add entry to index
             writer.AddDocument(doc);

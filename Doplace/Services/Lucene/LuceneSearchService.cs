@@ -1,4 +1,5 @@
-﻿using Doplace.Dto;
+﻿using Doplace.Constants;
+using Doplace.Dto;
 using Lucene.Net.Analysis.Standard;
 using Lucene.Net.Documents;
 using Lucene.Net.Index;
@@ -35,24 +36,24 @@ namespace Doplace.Services.Lucene
             return _mapLuceneToDataList(docs);
         }
 
-        public IEnumerable<IndexDataDto> Search(string query)
+        public IEnumerable<IndexDataDto> Search(SearchIndexDto dto)
         {
-            if (string.IsNullOrEmpty(query)) return new List<IndexDataDto>();
+            if (string.IsNullOrEmpty(dto.SearchQuery)) return new List<IndexDataDto>();
 
-            var terms = query.Trim().Replace("-", " ").Split(' ')
+            var terms = dto.SearchQuery.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => $"*{x.Trim()}*");
-            query = string.Join(" ", terms);
+            dto.SearchQuery = string.Join(" ", terms);
 
-            return _search(query, string.Empty);
+            return _search(dto);
         }
 
         #region Private Methods
 
         // main search method
-        private IEnumerable<IndexDataDto> _search(string searchQuery, string searchField = "")
+        private IEnumerable<IndexDataDto> _search(SearchIndexDto dto)
         {
             // validation
-            if (string.IsNullOrEmpty(searchQuery.Replace("*", "").Replace("?", ""))) return new List<IndexDataDto>();
+            if (string.IsNullOrEmpty(dto.SearchQuery.Replace("*", "").Replace("?", ""))) return new List<IndexDataDto>();
 
             // set up lucene searcher
             using (var searcher = new IndexSearcher(_directory, false))
@@ -60,33 +61,26 @@ namespace Doplace.Services.Lucene
                 var hits_limit = 1000;
                 var analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
-                // search by single field
-                if (!string.IsNullOrEmpty(searchField))
-                {
-                    var parser = new QueryParser(Version.LUCENE_30, searchField, analyzer);
-                    parser.AllowLeadingWildcard = true;
-                    var query = parseQuery(searchQuery, parser);
-                    var hits = searcher.Search(query, hits_limit).ScoreDocs;
-                    var results = _mapLuceneToDataList(hits, searcher);
-                    analyzer.Close();
-                    searcher.Dispose();
-                    return results;
-                }
-                // search by multiple fields (ordered by RELEVANCE)
-                else
-                {
-                    var parser = new QueryParser
-                        (Version.LUCENE_30, "SearchText", analyzer);
-                    parser.AllowLeadingWildcard = true;
-                    var query = parseQuery(searchQuery, parser);
-                    var hits = searcher.Search(query, null, hits_limit, Sort.RELEVANCE).ScoreDocs;
-                    var results = _mapLuceneToDataList(hits, searcher);
-                    analyzer.Close();
-                    searcher.Dispose();
-                    return results;
-                }
+                var parser = new QueryParser
+                        (Version.LUCENE_30, SearchConstants.FIELD_SEARCH_TEXT, analyzer);
+                parser.AllowLeadingWildcard = true;
+                var query = parseQuery(dto.SearchQuery, parser);
+                var hits = searcher.Search(query, GetFilter(dto.FilterField, dto.FilterValue), hits_limit, Sort.RELEVANCE).ScoreDocs;
+                var results = _mapLuceneToDataList(hits, searcher);
+                analyzer.Close();
+                searcher.Dispose();
+
+                return results;
             }
         }
+
+        private static Filter GetFilter(string field, string value)
+        {
+            if (string.IsNullOrEmpty(field)) return null;
+            return new QueryWrapperFilter(new TermQuery(new Term(field, value.ToLowerInvariant())));
+        }
+
+
         private static Query parseQuery(string searchQuery, QueryParser parser)
         {
             Query query;
@@ -114,11 +108,11 @@ namespace Doplace.Services.Lucene
         {
             var val = new IndexDataDto
             {
-                Id = Convert.ToInt32(doc.Get("Id")),
-                SearchText = doc.Get("SearchText"),
-                Space = doc.Get("Space")
+                Id = Convert.ToInt32(doc.Get(SearchConstants.FIELD_ID)),
+                SearchText = doc.Get(SearchConstants.FIELD_SEARCH_TEXT),
+                Space = doc.Get(SearchConstants.FIELD_SPACE)
             };
-            Enum.TryParse(doc.Get("IndexEntityType"), out IndexEntityType entityType);
+            Enum.TryParse(doc.Get(SearchConstants.FIELD_INDEX_ENTITY_TYPE), out IndexEntityType entityType);
             val.IndexEntityType = entityType;
             return val;
         }

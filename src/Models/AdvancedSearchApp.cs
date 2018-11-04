@@ -11,7 +11,7 @@ namespace Wvy.Models
     [App(Icon = "application", Name = "Advanced Search", Description = "Advanced search for space.", AllowMultiple = false)]
     public class AdvancedSearchApp : App
     {
-        //public AdvancedSearch Search { get; set; }
+        
     }
 
     public class AdvancedSearch

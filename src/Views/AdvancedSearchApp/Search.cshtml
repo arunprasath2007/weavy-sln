@@ -62,12 +62,18 @@
     
 </div>
 <div id="nav-tab-everything" class="container my-4">
-    <ul>
-        @foreach (var result in Model.SearchResults)
-        {
-            <li>@result.IndexEntityType.ToString() : @result.SearchText</li>
-        }
-    </ul>
+    @foreach (var item in Model.SearchResults)
+    {
+        <a href="@item.Url" class="search-result-item media">
+            @Html.SvgIcon(item.Icon, item.Color)
+            <div class="media-body">
+                @Html.Raw(item.SearchTextHtml(Model.Query))
+                <small class="d-block mt-1 text-muted">
+                    posted in @SpaceService.Get(Convert.ToInt32(item.Space)).Name
+                </small>
+            </div>
+        </a>
+    }
 </div>
 
 @section footer {

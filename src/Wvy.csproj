@@ -460,6 +460,7 @@
     <Content Include="media\notification.mp3" />
     <Content Include="media\ringing.mp3" />
     <Content Include="ping.html" />
+    <Content Include="Scripts\dop\search\search-result.js" />
     <Content Include="Scripts\_bootstrap.bundle" />
     <Content Include="Scripts\_button.bundle" />
     <Content Include="Scripts\_codesample.bundle" />

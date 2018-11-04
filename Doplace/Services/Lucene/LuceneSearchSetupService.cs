@@ -101,6 +101,8 @@ namespace Doplace.Services.Lucene
             doc.Add(new Field(SearchConstants.FIELD_SEARCH_TEXT, dto.SearchText, Field.Store.YES, Field.Index.ANALYZED));
             doc.Add(new Field(SearchConstants.FIELD_INDEX_ENTITY_TYPE, dto.IndexEntityType.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
             doc.Add(new Field(SearchConstants.FIELD_SPACE, dto.Space, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_AT, dto.ModifiedAt.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_BY, dto.ModifiedBy, Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             // add entry to index
             writer.AddDocument(doc);

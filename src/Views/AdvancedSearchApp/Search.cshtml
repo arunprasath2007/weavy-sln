@@ -73,7 +73,7 @@
             <div class="media-body">
                 @Html.Raw(item.SearchTextHtml(Model.Query))
                 <small class="d-block mt-1 text-muted">
-                    posted in @SpaceService.Get(Convert.ToInt32(item.Space)).Name
+                    @Html.Time(item.ModifiedAt) by @(UserService.Get(Convert.ToInt32(item.ModifiedBy))?.GetTitle()) in @SpaceService.Get(Convert.ToInt32(item.Space)).Name
                 </small>
             </div>
         </a>

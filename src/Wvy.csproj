@@ -319,6 +319,7 @@
     </Compile>
     <Compile Include="Models\AdvancedSearchApp.cs" />
     <Compile Include="Models\IndexBuilderDaemon.cs" />
+    <Compile Include="Models\IndexBuilderTool.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

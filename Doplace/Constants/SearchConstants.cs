@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Doplace.Constants
+﻿namespace Doplace.Constants
 {
     public class SearchConstants
     {
@@ -15,5 +9,9 @@ namespace Doplace.Constants
         public const string FIELD_SPACE = "Space";
 
         public const string FIELD_INDEX_ENTITY_TYPE = "IndexEntityType";
+
+        public const string FIELD_MODIFIED_AT = "ModifiedAt";
+
+        public const string FIELD_MODIFIED_BY = "ModifiedBy";
     }
 }

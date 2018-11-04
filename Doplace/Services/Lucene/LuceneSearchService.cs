@@ -110,7 +110,9 @@ namespace Doplace.Services.Lucene
             {
                 Id = Convert.ToInt32(doc.Get(SearchConstants.FIELD_ID)),
                 SearchText = doc.Get(SearchConstants.FIELD_SEARCH_TEXT),
-                Space = doc.Get(SearchConstants.FIELD_SPACE)
+                Space = doc.Get(SearchConstants.FIELD_SPACE),
+                ModifiedAt = DateTime.Parse(doc.Get(SearchConstants.FIELD_MODIFIED_AT)),
+                ModifiedBy = doc.Get(SearchConstants.FIELD_MODIFIED_BY)
             };
             Enum.TryParse(doc.Get(SearchConstants.FIELD_INDEX_ENTITY_TYPE), out IndexEntityType entityType);
             val.IndexEntityType = entityType;

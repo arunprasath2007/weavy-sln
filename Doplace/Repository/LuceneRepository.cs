@@ -18,15 +18,15 @@ namespace Doplace.Repository
         {
             //DECLARE @startTime DATETIME2 = '2018-11-1 00:00:00', @endTime DATETIME2  = '2018-11-2 00:00:00'
 
-            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space'
+            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space', p.ModifiedAt, p.ModifiedBy
 	                FROM dbo.Posts p
 		                INNER JOIN dbo.Spaces s ON p.SpaceId = s.Id
-	                WHERE p.ModifiedAt >= @startTime AND p.ModifiedAt < @endTime
+	                WHERE p.ModifiedAt >= @startTime AND p.ModifiedAt < @endTime AND p.TrashedAt IS NULL
                 UNION ALL
-                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space'
+                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space', c.ModifiedAt, c.ModifiedBy
 	                FROM dbo.Comments c
 		                INNER JOIN dbo.Spaces s ON c.SpaceId = s.Id
-	                WHERE c.ModifiedAt >= @startTime AND c.ModifiedAt < @endTime", 
+	                WHERE c.ModifiedAt >= @startTime AND c.ModifiedAt < @endTime AND c.TrashedAt IS NULL", 
                 new {
                     startTime,
                     endTime
@@ -37,12 +37,12 @@ namespace Doplace.Repository
         {
             //DECLARE @startTime DATETIME2 = '2018-11-1 00:00:00', @endTime DATETIME2  = '2018-11-2 00:00:00'
 
-            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space'
+            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space', p.ModifiedAt, p.ModifiedBy
 	                FROM dbo.Posts p
 		                INNER JOIN dbo.Spaces s ON p.SpaceId = s.Id
 	                WHERE p.TrashedAt >= @startTime AND p.TrashedAt < @endTime
                 UNION ALL
-                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space'
+                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space', c.ModifiedAt, c.ModifiedBy
 	                FROM dbo.Comments c
 		                INNER JOIN dbo.Spaces s ON c.SpaceId = s.Id
 	                WHERE c.TrashedAt >= @startTime AND c.TrashedAt < @endTime",

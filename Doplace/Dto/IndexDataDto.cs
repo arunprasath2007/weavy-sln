@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Doplace.Dto
 {
@@ -11,6 +12,10 @@ namespace Doplace.Dto
         public IndexEntityType IndexEntityType { get; set; }
 
         public string Space { get; set; }
+
+        public DateTime ModifiedAt { get; set; }
+
+        public string ModifiedBy { get; set; }
 
         public string Url {
             get

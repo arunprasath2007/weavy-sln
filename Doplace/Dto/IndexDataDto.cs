@@ -36,7 +36,7 @@ namespace Doplace.Dto
                     case IndexEntityType.Post:
                         return "forum";
                     case IndexEntityType.Comment:
-                        return "";
+                        return "comment";
                     default:
                         return "";
                 }
@@ -52,7 +52,7 @@ namespace Doplace.Dto
                     case IndexEntityType.Post:
                         return "green";
                     case IndexEntityType.Comment:
-                        return "";
+                        return "lime";
                     default:
                         return "";
                 }
@@ -62,9 +62,7 @@ namespace Doplace.Dto
         public string SearchTextHtml(string query)
         {
             var regex = "(" + string.Join("|", query.Split(' ')) + ")";
-
             MatchEvaluator myEvaluator = new MatchEvaluator(m => string.Format("<span class='highlight'>{0}</span>", m.Value));
-
             return Regex.Replace(SearchText, regex, myEvaluator, RegexOptions.IgnoreCase);
         }
     }

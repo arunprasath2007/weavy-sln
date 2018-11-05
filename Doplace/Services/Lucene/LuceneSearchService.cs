@@ -10,7 +10,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Weavy.Core.Models;
 using Version = Lucene.Net.Util.Version;
+using Query = Lucene.Net.Search.Query;
 
 namespace Doplace.Services.Lucene
 {
@@ -20,10 +22,10 @@ namespace Doplace.Services.Lucene
         {
         }
 
-        public IEnumerable<IndexDataDto> GetAll()
+        public IEnumerable<IndexDocument> GetAll()
         {
             // validate search index
-            if (!System.IO.Directory.EnumerateFiles(_luceneFolderPhysicalPath).Any()) return new List<IndexDataDto>();
+            if (!System.IO.Directory.EnumerateFiles(_luceneFolderPhysicalPath).Any()) return new List<IndexDocument>();
 
             // set up lucene searcher
             var searcher = new IndexSearcher(_directory, false);
@@ -36,9 +38,9 @@ namespace Doplace.Services.Lucene
             return _mapLuceneToDataList(docs);
         }
 
-        public IEnumerable<IndexDataDto> Search(SearchIndexDto dto)
+        public IEnumerable<IndexDocument> Search(SearchIndexDto dto)
         {
-            if (string.IsNullOrEmpty(dto.SearchQuery)) return new List<IndexDataDto>();
+            if (string.IsNullOrEmpty(dto.SearchQuery)) return new List<IndexDocument>();
 
             var terms = dto.SearchQuery.Trim().Replace("-", " ").Split(' ')
                 .Where(x => !string.IsNullOrEmpty(x)).Select(x => $"*{x.Trim()}*");
@@ -50,10 +52,10 @@ namespace Doplace.Services.Lucene
         #region Private Methods
 
         // main search method
-        private IEnumerable<IndexDataDto> _search(SearchIndexDto dto)
+        private IEnumerable<IndexDocument> _search(SearchIndexDto dto)
         {
             // validation
-            if (string.IsNullOrEmpty(dto.SearchQuery.Replace("*", "").Replace("?", ""))) return new List<IndexDataDto>();
+            if (string.IsNullOrEmpty(dto.SearchQuery.Replace("*", "").Replace("?", ""))) return new List<IndexDocument>();
 
             // set up lucene searcher
             using (var searcher = new IndexSearcher(_directory, false))
@@ -62,7 +64,7 @@ namespace Doplace.Services.Lucene
                 var analyzer = new StandardAnalyzer(Version.LUCENE_30);
 
                 var parser = new QueryParser
-                        (Version.LUCENE_30, SearchConstants.FIELD_SEARCH_TEXT, analyzer);
+                        (Version.LUCENE_30, SearchConstants.FIELD_TEXT, analyzer);
                 parser.AllowLeadingWildcard = true;
                 var query = parseQuery(dto.SearchQuery, parser);
                 var hits = searcher.Search(query, GetFilter(dto.FilterField, dto.FilterValue), hits_limit, Sort.RELEVANCE).ScoreDocs;
@@ -96,27 +98,17 @@ namespace Doplace.Services.Lucene
         }
 
         // map Lucene search index to data
-        private static IEnumerable<IndexDataDto> _mapLuceneToDataList(IEnumerable<Document> hits)
+        private static IEnumerable<IndexDocument> _mapLuceneToDataList(IEnumerable<Document> hits)
         {
             return hits.Select(_mapLuceneDocumentToData).ToList();
         }
-        private static IEnumerable<IndexDataDto> _mapLuceneToDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
+        private static IEnumerable<IndexDocument> _mapLuceneToDataList(IEnumerable<ScoreDoc> hits, IndexSearcher searcher)
         {
             return hits.Select(hit => _mapLuceneDocumentToData(searcher.Doc(hit.Doc))).ToList();
         }
-        private static IndexDataDto _mapLuceneDocumentToData(Document doc)
+        private static IndexDocument _mapLuceneDocumentToData(Document doc)
         {
-            var val = new IndexDataDto
-            {
-                Id = Convert.ToInt32(doc.Get(SearchConstants.FIELD_ID)),
-                SearchText = doc.Get(SearchConstants.FIELD_SEARCH_TEXT),
-                Space = doc.Get(SearchConstants.FIELD_SPACE),
-                ModifiedAt = DateTime.Parse(doc.Get(SearchConstants.FIELD_MODIFIED_AT)),
-                ModifiedBy = doc.Get(SearchConstants.FIELD_MODIFIED_BY)
-            };
-            Enum.TryParse(doc.Get(SearchConstants.FIELD_INDEX_ENTITY_TYPE), out IndexEntityType entityType);
-            val.IndexEntityType = entityType;
-            return val;
+            return new IndexDocument(doc);
         }
 
         #endregion

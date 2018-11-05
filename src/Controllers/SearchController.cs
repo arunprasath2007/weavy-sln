@@ -1,40 +1,38 @@
-﻿using Doplace.Constants;
-using Doplace.Repository;
-using Doplace.Services.Lucene;
+﻿using Doplace.Services.Lucene;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Web.Hosting;
+using System.Web;
 using System.Web.Mvc;
 using Weavy.Core;
 using Weavy.Core.Models;
 using Weavy.Core.Services;
-using Weavy.Web;
-using Weavy.Web.Controllers;
-using Wvy.Models;
 
 namespace Wvy.Controllers
 {
-    [RoutePrefix("apps/{id:int}/df8beb98-7dd5-4c40-93bc-3da22d03d616")]
-    public class AdvancedSearchAppController : AppController<AdvancedSearchApp>
+    [RoutePrefix("doplace/search")]
+    public class SearchController : Controller
     {
-        private readonly SpaceRepository _spaceRepository;
-
-        public AdvancedSearchAppController()
+        [HttpGet]
+        [Route("test")]
+        public ActionResult Test()
         {
-            _spaceRepository = new SpaceRepository();
-        }
-
-        public override ActionResult Get(AdvancedSearchApp app, Query query)
-        {
-            return Search(app.Id, null, query);
+            return Json(true, JsonRequestBehavior.AllowGet);
         }
 
         [HttpGet]
-        [Route("{tab:vals(posts|files|comments)?}")]
-        public ActionResult Search(int id, string tab = null, Query query = null)
+        [Route("{tab:vals(everything|spaces|posts|files|comments)?}")]
+        public ActionResult Index(string tab = null, Query query = null)
         {
-            App app = GetApp(id);
-            query.SpaceId = app.SpaceId;
-            if (tab == "posts")
+            query.SpaceId = null;
+            if (tab == "spaces")
+            {
+                query.EntityTypes = new EntityType[1]
+                {
+                EntityType.Space
+                };
+            }
+            else if (tab == "posts")
             {
                 query.EntityTypes = new EntityType[1]
                 {
@@ -57,8 +55,9 @@ namespace Wvy.Controllers
             }
             else
             {
-                query.EntityTypes = new EntityType[3]
+                query.EntityTypes = new EntityType[4]
                 {
+                EntityType.Space,
                 EntityType.Post,
                 EntityType.Content,
                 EntityType.Comment
@@ -71,13 +70,11 @@ namespace Wvy.Controllers
             //    SearchQuery = "text"
             //});
             //model.AddRange(rslt);
-
-
             if (base.Request.IsAjaxRequest())
             {
                 return PartialView("_SearchResult", model);
             }
-            return View("Get", model);
+            return View(model);
         }
     }
 }

@@ -314,6 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\AdvancedSearchAppController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -926,7 +927,7 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="Views\AdvancedSearchApp\Get.cshtml" />
-    <Content Include="Views\AdvancedSearchApp\Search.cshtml" />
+    <Content Include="Views\Search\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -940,6 +941,7 @@
       <Name>Doplace</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

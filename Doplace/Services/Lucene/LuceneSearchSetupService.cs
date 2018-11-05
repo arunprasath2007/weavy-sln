@@ -8,6 +8,8 @@ using Lucene.Net.Index;
 using Lucene.Net.Search;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using Weavy.Core.Models;
 using Version = Lucene.Net.Util.Version;
 
 namespace Doplace.Services.Lucene
@@ -21,12 +23,12 @@ namespace Doplace.Services.Lucene
             _luceneRepository = new LuceneRepository();
         }
 
-        public void AddToIndex(IndexDataDto dto)
+        public void AddToIndex(IndexDocument dto)
         {
-            AddToIndex(new List<IndexDataDto> { dto });
+            AddToIndex(new List<IndexDocument> { dto });
         }
 
-        public void AddToIndex(IEnumerable<IndexDataDto> dto)
+        public void AddToIndex(IEnumerable<IndexDocument> dto)
         {
             // init lucene
             var analyzer = new StandardAnalyzer(Version.LUCENE_30);
@@ -53,12 +55,12 @@ namespace Doplace.Services.Lucene
             UpdateIndex(dataToBeUpdatedDto);
         }
 
-        public void RemoveFromIndex(IndexDataDto dto)
+        public void RemoveFromIndex(IndexDocument dto)
         {
-            RemoveFromIndex(new List<IndexDataDto> { dto });
+            RemoveFromIndex(new List<IndexDocument> { dto });
         }
 
-        public void RemoveFromIndex(IEnumerable<IndexDataDto> dto)
+        public void RemoveFromIndex(IEnumerable<IndexDocument> dto)
         {
             // init lucene
             var analyzer = new StandardAnalyzer(Version.LUCENE_30);
@@ -68,7 +70,7 @@ namespace Doplace.Services.Lucene
                 foreach (var item in dto)
                 {
                     var idQuery = new TermQuery(new Term(SearchConstants.FIELD_ID, item.Id.ToString()));
-                    var entityTypeQuery = new TermQuery(new Term(SearchConstants.FIELD_INDEX_ENTITY_TYPE, item.IndexEntityType.ToString()));
+                    var entityTypeQuery = new TermQuery(new Term(SearchConstants.FIELD_TYPE, item.Type.ToString()));
                     writer.DeleteDocuments(idQuery, entityTypeQuery);
                 }
 
@@ -78,12 +80,12 @@ namespace Doplace.Services.Lucene
             }
         }
 
-        public void UpdateIndex(IndexDataDto dto)
+        public void UpdateIndex(IndexDocument dto)
         {
-            UpdateIndex(new List<IndexDataDto> { dto });
+            UpdateIndex(new List<IndexDocument> { dto });
         }
 
-        public void UpdateIndex(IEnumerable<IndexDataDto> dto)
+        public void UpdateIndex(IEnumerable<IndexDocument> dto)
         {
             RemoveFromIndex(dto);
             AddToIndex(dto);
@@ -91,18 +93,28 @@ namespace Doplace.Services.Lucene
 
         #region Private methods
 
-        private static void _addToLuceneIndex(IndexDataDto dto, IndexWriter writer)
+        private static void _addToLuceneIndex(IndexDocument dto, IndexWriter writer)
         {
             // add new index entry
             var doc = new Document();
 
             // add lucene fields mapped to db fields
             doc.Add(new Field(SearchConstants.FIELD_ID, dto.Id.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(SearchConstants.FIELD_SEARCH_TEXT, dto.SearchText, Field.Store.YES, Field.Index.ANALYZED));
-            doc.Add(new Field(SearchConstants.FIELD_INDEX_ENTITY_TYPE, dto.IndexEntityType.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(SearchConstants.FIELD_SPACE, dto.Space, Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_AT, dto.ModifiedAt.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
-            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_BY, dto.ModifiedBy, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_SPACE, dto.SpaceId.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_TYPE, dto.Type.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_ICON, dto.Icon, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_COLOR, dto.Color, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_KIND, dto.Kind, Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_NAME, dto.Name, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_TITLE, dto.Title, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_TEXT, "text", Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_DESCRIPTION, dto.Description, Field.Store.YES, Field.Index.ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_AT, DateTools.DateToString(dto.ModifiedAt, DateTools.Resolution.SECOND), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_MODIFIED_BY, dto.ModifiedById.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_CREATED_AT, DateTools.DateToString(dto.CreatedAt, DateTools.Resolution.SECOND), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_CREATED_BY, dto.CreatedById.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_TS, dto.Timestamp.ToString(), Field.Store.YES, Field.Index.NOT_ANALYZED));
+            doc.Add(new Field(SearchConstants.FIELD_TAGS, string.Join(",", dto.Tags.ToArray()), Field.Store.YES, Field.Index.NOT_ANALYZED));
 
             // add entry to index
             writer.AddDocument(doc);

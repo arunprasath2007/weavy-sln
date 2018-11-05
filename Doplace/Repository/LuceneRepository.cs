@@ -2,6 +2,7 @@
 using Doplace.Repository.Core;
 using System;
 using System.Collections.Generic;
+using Weavy.Core.Models;
 
 namespace Doplace.Repository
 {
@@ -14,43 +15,50 @@ namespace Doplace.Repository
             _repository = new DapperRepository();
         }
 
-        public IEnumerable<IndexDataDto> GetModifiedIndexData(DateTime startTime, DateTime endTime)
+        public IEnumerable<IndexDocument> GetModifiedIndexData(DateTime startTime, DateTime endTime)
         {
             //DECLARE @startTime DATETIME2 = '2018-11-1 00:00:00', @endTime DATETIME2  = '2018-11-2 00:00:00'
 
-            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space', p.ModifiedAt, p.ModifiedBy
-	                FROM dbo.Posts p
-		                INNER JOIN dbo.Spaces s ON p.SpaceId = s.Id
-	                WHERE p.ModifiedAt >= @startTime AND p.ModifiedAt < @endTime AND p.TrashedAt IS NULL
-                UNION ALL
-                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space', c.ModifiedAt, c.ModifiedBy
-	                FROM dbo.Comments c
-		                INNER JOIN dbo.Spaces s ON c.SpaceId = s.Id
-	                WHERE c.ModifiedAt >= @startTime AND c.ModifiedAt < @endTime AND c.TrashedAt IS NULL", 
-                new {
-                    startTime,
-                    endTime
-                });
+            return _repository.Query<IndexDocument>(@"SELECT 1 as Id,
+	1 as [SpaceId],
+	7 as [Type],
+	'forum' as [Icon],
+	'green' as [Color],
+	'document' as [kind],
+	'name' as [name],
+	'title' as [title],
+	'text' as [text],
+	'description' as 'description',
+	'2018-01-01' as 'createdAt',
+	1 as 'createdById',
+	'2018-01-01' as 'modifiedAt',
+	1 as 'ModifiedById',
+	2010101 as 'ts',
+	't1' as 'tags'", 
+                null);
         }
 
-        public IEnumerable<IndexDataDto> GetDeletedIndexData(DateTime startTime, DateTime endTime)
+        public IEnumerable<IndexDocument> GetDeletedIndexData(DateTime startTime, DateTime endTime)
         {
             //DECLARE @startTime DATETIME2 = '2018-11-1 00:00:00', @endTime DATETIME2  = '2018-11-2 00:00:00'
 
-            return _repository.Query<IndexDataDto>(@"SELECT p.Id, p.[Text] AS 'SearchText', 1 AS 'IndexEntityType', s.[Id] AS 'Space', p.ModifiedAt, p.ModifiedBy
-	                FROM dbo.Posts p
-		                INNER JOIN dbo.Spaces s ON p.SpaceId = s.Id
-	                WHERE p.TrashedAt >= @startTime AND p.TrashedAt < @endTime
-                UNION ALL
-                SELECT c.Id, c.[Text] AS 'SearchText', 2 AS 'IndexEntityType', s.[Id] AS 'Space', c.ModifiedAt, c.ModifiedBy
-	                FROM dbo.Comments c
-		                INNER JOIN dbo.Spaces s ON c.SpaceId = s.Id
-	                WHERE c.TrashedAt >= @startTime AND c.TrashedAt < @endTime",
-                new
-                {
-                    startTime,
-                    endTime
-                });
+            return _repository.Query<IndexDocument>(@"SELECT 1 as Id,
+	1 as [SpaceId],
+	7 as [Type],
+	'forum' as [Icon],
+	'green' as [Color],
+	'document' as [kind],
+	'name' as [name],
+	'title' as [title],
+	'text' as [text],
+	'description' as 'description',
+	'2018-01-01' as 'createdAt',
+	1 as 'createdById',
+	'2018-01-01' as 'modifiedAt',
+	1 as 'ModifiedById',
+	2010101 as 'ts',
+	't1' as 'tags'",
+                null);
         }
     }
 }

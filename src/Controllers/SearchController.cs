@@ -10,16 +10,9 @@ using Weavy.Core.Services;
 
 namespace Wvy.Controllers
 {
-    [RoutePrefix("doplace/search")]
+    [RoutePrefix("dop/search")]
     public class SearchController : Controller
     {
-        [HttpGet]
-        [Route("test")]
-        public ActionResult Test()
-        {
-            return Json(true, JsonRequestBehavior.AllowGet);
-        }
-
         [HttpGet]
         [Route("{tab:vals(everything|spaces|posts|files|comments)?}")]
         public ActionResult Index(string tab = null, Query query = null)

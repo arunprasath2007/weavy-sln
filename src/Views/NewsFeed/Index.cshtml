@@ -1,0 +1,68 @@
+﻿@model PostsModel
+@{
+    Title = Model.Space.Name;
+    Layout = "~/Views/Shared/_DopLayout.cshtml";
+}
+
+@section navbar_left {
+<div class="navbar-icons">
+    <a class="btn btn-icon d-standalone" href="@WeavyContext.ApplicationPath">@Html.IconImg(24)</a>
+</div>
+
+}
+
+
+<div class="cover cover-bg cover-under-navbar">
+    <div class="container d-flex flex-column">
+        @if (PermissionService.HasSystemPermission(Permission.ManageSystem) && WeavyContext.Theme.Logo == null)
+        {
+            <a href="@(Url.Action<Weavy.Web.Areas.Manage.Controllers.HomeController>(c => c.Theme()))" class="my-4 d-flex flex-column align-items-center mx-auto btn btn-outline-primary border-transparent align-self-center">
+                @Html.IconImg(128)
+                <div class="small">Add your logo...</div>
+            </a>
+        }
+        else
+        {
+            <div class="my-4 d-flex flex-column align-items-center mx-auto align-self-center">
+                @Html.IconImg(128)
+            </div>
+
+        }
+    </div>
+    <div class="facepile">
+        @Model.Members.Facepile(size: 32, link: true, presence: true)
+    </div>
+</div>
+
+<div class="container my-4">
+    
+    <p class="small text-center text-muted">
+        <a href="@(Url.Action<SpaceController>(c=>c.Members(WeavyContext.Space.Id, null, null)))">@Model.Members.TotalCount.SingularizeOrPluralize("member", "members")</a>
+    </p>
+
+    @if (!WeavyContext.Space.IsMember && SpaceService.HasPendingMembershipRequest(WeavyContext.Space.Id))
+    {
+        <div class="alert alert-info d-flex">
+            @Html.SvgIcon("information", size: 36, htmlAttributes: new { @class = "align-self-start flex-noscale mt-1 mr-2" })
+            <span>Your membership request is waiting for approval.</span>
+        </div>
+    }
+
+    @if (WeavyContext.Space.HasPermission(Permission.List))
+    {
+        @Html.Partial("_PostForm", WeavyContext.Space)
+        <div id="infinite-scroll-target" class="posts">
+            @Html.Partial("_Posts", Model.Posts)
+        </div>
+        @Html.ScrollMore(Model.Posts)
+    }
+</div>
+
+@section footer {
+    @{
+        Html.RenderPartial("_FeedbackModal");
+        Html.RenderPartial("_EditPostModal");
+        Html.RenderPartial("_MovePostModal");
+        Html.RenderPartial("_EditCommentModal");
+    }
+}

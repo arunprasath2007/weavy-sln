@@ -4,7 +4,11 @@
     Title = "Start";
 }
 
-@section navbar_left {
+<script>
+    window.location.href = '@Url.Action("Index", "NewsFeed")';
+</script>
+
+@*@section navbar_left {
     <div class="navbar-icons">
         <a class="btn btn-icon" href="@WeavyContext.ApplicationPath">@Html.IconImg(24)</a>
     </div>
@@ -199,4 +203,4 @@
             </div>
         </div>
     }
-}
+}*@

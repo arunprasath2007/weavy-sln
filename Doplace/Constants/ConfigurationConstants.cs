@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using Weavy.Core.Repos;
 
 namespace Doplace.Constants
@@ -8,5 +9,10 @@ namespace Doplace.Constants
         public static string LUCENE_INDEX_FOLDER { get { return "lucene_index"; } }
 
         public static string CONNECTION_STRING { get { return SqlHelper.ConnectionString; } }
+
+        public static int DOP_GLOBAL_SPACE_ID
+        {
+            get { return Convert.ToInt32(ConfigurationManager.AppSettings["dop.global.space-id"]); }
+        }
     }
 }

@@ -1,0 +1,73 @@
+﻿/// <reference path="../_core.scss" />
+
+.dop-nav-link {
+    padding: 0px !important;
+    height: 2rem;
+}
+
+.dop-nav-link span, .text-dop-dark {
+    color: $theme-700 !important;
+}
+
+.dop-nav-link.nav-link.active span {
+    color: $theme-900 !important;
+}
+
+.dop-nav-link.nav-link.active .text-dop-dark {
+    color: $white !important;
+    background-color: $theme-900 !important;
+}
+
+.fixed-bottom .dop-nav-link.nav-link.active {
+    border-bottom: none !important;
+    border-top-color: $theme-900 !important;
+    border-top-style: solid !important;
+    border-top-width: 4px !important;
+}
+
+.dop-nav-link svg {
+    margin-top: 2px;
+    border-bottom-left-radius: 24px;
+    border-bottom-right-radius: 24px;
+    border-bottom-style: solid;
+    border-bottom-width: 0.8px;
+    border-image-outset: 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100%;
+    border-image-source: none;
+    border-image-width: 1;
+    border-left-color: rgb(219, 219, 219);
+    border-left-style: solid;
+    border-left-width: 0.8px;
+    border-right-color: rgb(219, 219, 219);
+    border-right-style: solid;
+    border-right-width: 0.8px;
+    border-top-color: rgb(219, 219, 219);
+    border-top-left-radius: 24px;
+    border-top-right-radius: 24px;
+    border-top-style: solid;
+    border-top-width: 0.8px;
+    box-sizing: border-box;
+    border-bottom-color: rgb(219, 219, 219);
+    cursor: pointer;
+    display: block;
+    height: 23px;
+    line-height: 38px;
+    top: 0px;
+    width: 23px;
+}
+
+.dop-nav-link.nav-link.active{
+    border-bottom-color: $theme-900 !important;
+}
+
+.dop-nav-tabs {
+    min-height: 1rem !important;
+    background-color: $white;
+    padding-top: 0.5rem;
+}
+
+.dop-navbar-primary {
+    padding: 0px !important;
+    height: 40px;
+}

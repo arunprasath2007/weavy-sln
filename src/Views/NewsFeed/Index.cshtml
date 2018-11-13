@@ -35,7 +35,7 @@
 </div>
 
 <div class="container my-4">
-    
+
     <p class="small text-center text-muted">
         <a href="@(Url.Action<SpaceController>(c=>c.Members(WeavyContext.Space.Id, null, null)))">@Model.Members.TotalCount.SingularizeOrPluralize("member", "members")</a>
     </p>
@@ -50,7 +50,6 @@
 
     @if (WeavyContext.Space.HasPermission(Permission.List))
     {
-        @Html.Partial("_PostForm", WeavyContext.Space)
         <div id="infinite-scroll-target" class="posts">
             @Html.Partial("_Posts", Model.Posts)
         </div>

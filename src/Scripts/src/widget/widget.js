@@ -81,11 +81,18 @@
 
         // close open strip
         Weavy.prototype.close = function () {
+            var $openFrame = $(".weavy-strip.weavy-open iframe", self.strips);
+
             $(self.container).removeClass("weavy-open");
             $(".weavy-strip", self.strips).removeClass("weavy-open");
             $(".weavy-button", self.buttons).removeClass("weavy-open");
             $(".weavy-notification-frame", self.container).remove();
             self.triggerEvent("close", null);
+            try {
+                $openFrame[0].contentWindow.postMessage({ name: 'hide' }, "*");
+            } catch (e) {
+                console.debug("Could not postMessage:hide to frame");
+            }
         }
 
         // open specified strip (personal, messenger or bubble)
@@ -110,11 +117,20 @@
                     var $frame = $("iframe", $strip);
 
                     if (destination) {
+                        // load destination
                         loadInTarget(strip, destination);
                         loading.call(self, "weavy-strip-" + strip, true, true);
                     } else if (!$frame.attr("src") && $frame[0].dataset && $frame[0].dataset.src) {
+                        // start predefined loading
                         $frame.attr("src", $frame[0].dataset.src);
                         loading.call(self, "weavy-strip-" + strip, true);
+                    } else {
+                        // already loaded
+                        try {
+                            $frame[0].contentWindow.postMessage({ name: 'show' }, "*");
+                        } catch (e) {
+                            console.debug("Could not postMessage:show to frame");
+                        }
                     }
 
                     self.triggerEvent("open", { target: strip });

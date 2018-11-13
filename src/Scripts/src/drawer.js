@@ -12,6 +12,9 @@ weavy.drawer = (function ($) {
     function close() {
         $("html").removeClass("drawer-open");
         $(".drawer").removeClass("drawer-in");
+
+        setTimeout(weavy.notifications.sort, 200);
+        setTimeout(weavy.stars.prune, 200);
     }
 
     function toggle(drawer) {
@@ -49,7 +52,7 @@ weavy.drawer = (function ($) {
 
     // close drawer when toggling starred/followed
     $(document).on("click", "#drawer-space [data-toggle!=dropdown]", function () {
-        window.setTimeout("weavy.drawer.close();", 500);
+        setTimeout(close, 500);
     });
 
     //// close drawer on ESC
@@ -59,15 +62,18 @@ weavy.drawer = (function ($) {
     //    }
     //});
 
-    var loadActiveTab = function (e) {
-        var $drawer = $("#drawer-user");
-        var $active = $("[data-toggle=tab].active", $drawer);
-        weavy.tab.load($active.attr("href"));
+    function promiseTimeout(time) {
+        return new Promise(function (resolve) {
+            setTimeout(function () { resolve(); }, time);
+        });
     };
 
     // load active tab when drawer is opened
     $(document).on("click", "[data-toggle=drawer][data-target='#drawer-user']", function () {
-        setTimeout(loadActiveTab, 200);
+        var $drawer = $("#drawer-user");
+        var $active = $("[data-toggle=tab].active", $drawer);
+
+        weavy.tab.load($active.attr("href"), promiseTimeout(200));
     });
 
     // configure remote loading of tabs in #drawer-user
@@ -75,16 +81,6 @@ weavy.drawer = (function ($) {
         weavy.tab.load($(this).attr("href"));
     });
 
-    // Preload active tab
-    if (document.readyState === "complete") {
-        loadActiveTab();
-    } else {
-        $(document).on("readystatechange", function () {
-            if (document.readyState === "complete") {
-                loadActiveTab();
-            }
-        })
-    }
 
     return {
         open: open,

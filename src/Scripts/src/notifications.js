@@ -15,6 +15,17 @@ weavy.notifications = (function ($) {
     function readAll() {
         return weavy.api.readAll();
     }
+
+    function sortTabNotifications() {
+        // Place read notifications last
+        var byDataIdDesc = function (a, b) {
+            return b.getAttribute("data-id") - a.getAttribute("data-id");
+        }
+
+        $(".notification:not(.read)", "#tab-notifications .list-group").sort(byDataIdDesc).appendTo("#tab-notifications .list-group");
+        $(".notification.read", "#tab-notifications .list-group").sort(byDataIdDesc).appendTo("#tab-notifications .list-group");
+    }
+
     
     // toggle notification read/unread on click
     $(document).on("click", "[data-toggle='notification']", function (e) {
@@ -50,10 +61,10 @@ weavy.notifications = (function ($) {
     
     // callbacks for realtime events
     weavy.realtime.on("notification", function (event, data) {
-        $("#notifications .empty").remove();
+        $("#tab-notifications .empty").remove();
                 
         get(data.id).then(function (html) {            
-            $(html).prependTo("#notifications .list-group");            
+            $(html).prependTo("#tab-notifications .list-group");            
         });        
     });
 
@@ -89,7 +100,8 @@ weavy.notifications = (function ($) {
     return {
         read: read,
         unread: unread,
-        readAll: readAll
+        readAll: readAll,
+        sort: sortTabNotifications
     };
 
 })($);

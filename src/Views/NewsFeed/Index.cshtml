@@ -13,7 +13,7 @@
 
 
 <div class="cover cover-bg cover-under-navbar">
-    <div class="container d-flex flex-column">
+    <div class="container d-flex flex-column" style="padding-top: 25px">
         @if (PermissionService.HasSystemPermission(Permission.ManageSystem) && WeavyContext.Theme.Logo == null)
         {
             <a href="@(Url.Action<Weavy.Web.Areas.Manage.Controllers.HomeController>(c => c.Theme()))" class="my-4 d-flex flex-column align-items-center mx-auto btn btn-outline-primary border-transparent align-self-center">

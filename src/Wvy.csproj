@@ -314,7 +314,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Controllers\IFrameAppController.cs" />
-    <Compile Include="Controllers\NewsFeedController.cs" />
+    <Compile Include="Controllers\HubController.cs" />
     <Compile Include="Controllers\AdvancedSearchAppController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
@@ -936,7 +936,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\NewsFeed\Index.cshtml" />
+    <Content Include="Views\Hub\Index.cshtml" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
@@ -946,6 +946,7 @@
     <Content Include="Styles\doplace\_layout.scss" />
     <Content Include="Styles\_doplace.scss" />
     <Content Include="Views\IFrameApp\Get.cshtml" />
+    <Content Include="Views\Hub\Files.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

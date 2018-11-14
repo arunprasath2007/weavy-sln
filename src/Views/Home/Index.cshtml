@@ -1,11 +1,11 @@
 ﻿@model HomeModel
 
 @{
-    Title = "Start";
+    Title = "Hub";
 }
 
 <script>
-    window.location.href = '@Url.Action("Index", "NewsFeed")';
+    window.location.href = '@(Url.Action<HubController>(c => c.Index(null)))';
 </script>
 
 @*@section navbar_left {

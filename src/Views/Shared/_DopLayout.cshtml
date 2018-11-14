@@ -82,7 +82,7 @@
         else
         {
             <nav class="nav nav-tabs dop-nav-tabs">
-                <a class="nav-link dop-nav-link active" href="@(Url.Action<NewsFeedController>(c => c.Index(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Hub</span></a>
+                <a class="nav-link dop-nav-link active" href="@(Url.Action<HubController>(c => c.Index(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Hub</span></a>
                 <a class="nav-link dop-nav-link" href="@(Url.Action<Weavy.Web.Areas.Messenger.Controllers.MessengerController>(c => c.Index()))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Chat</span></a>
                 <a class="nav-link dop-nav-link" href="@(Url.Action<SpaceController>(c => c.Index(null, null, null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Teams</span></a>
                 <a class="nav-link dop-nav-link" href="/">@Html.SvgIcon("dop-hub", "dop-dark") <span>My Desk</span></a>
@@ -91,7 +91,7 @@
         }
     </nav>
     <div class="alerts">@Html.AlertMessages()</div>
-    <main @if (IsSectionDefined("fab")) { <text> class="has-fab" </text> }>
+    <main @if (IsSectionDefined("fab")) { <text> class="has-fab dop-has-fab" </text> }>
         @RenderBody()
         @RenderSection("fab", required: false)
     </main>
@@ -104,7 +104,8 @@
     }
     <nav class="navbar-theme fixed-bottom">
         <nav class="nav nav-tabs dop-nav-tabs">
-            <a class="nav-link dop-nav-link active" href="@(Url.Action<NewsFeedController>(c => c.Index(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Channel</span></a>
+            <a class="nav-link dop-nav-link active" href="@(Url.Action<HubController>(c => c.Index(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Channel</span></a>
+            <a class="nav-link dop-nav-link" href="@(Url.Action<HubController>(c => c.Files(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Files</span></a>
         </nav>
     </nav>
     <div class="drawer-backdrop"></div>

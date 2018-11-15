@@ -28,7 +28,7 @@
 <div class="container-fluid my-3">
     @(Html.FilterForm<SpaceController>(c => c.Index(null, tab, null), Model.Query))
 
-    @if (Model.HasItems()) {
+    @if (Model.Where(x => x.Id != ConfigurationConstants.DOP_GLOBAL_SPACE_ID).HasItems()) {
         <table class="table table-hover table-spaces">
             <thead>
                 <tr>

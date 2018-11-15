@@ -320,6 +320,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Helpers\ViewHelper.cs" />
     <Compile Include="Models\AdvancedSearchApp.cs" />
     <Compile Include="Models\IFrameApp.cs" />
     <Compile Include="Models\IndexBuilderDaemon.cs" />
@@ -947,6 +948,7 @@
     <Content Include="Styles\_doplace.scss" />
     <Content Include="Views\IFrameApp\Get.cshtml" />
     <Content Include="Views\Hub\Files.cshtml" />
+    <Content Include="Views\Hub\_HubNavBar.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

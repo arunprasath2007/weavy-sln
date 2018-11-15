@@ -1,8 +1,8 @@
 ﻿@model SearchResult<Space, SpaceQuery>
 
 
-@if (Model.Any()) {
-    foreach (var space in Model) {
+@if (Model.Any(x => x.Id != ConfigurationConstants.DOP_GLOBAL_SPACE_ID)) {
+    foreach (var space in Model.Where(x => x.Id != ConfigurationConstants.DOP_GLOBAL_SPACE_ID)) {
         bool visible = !space.IsTrashed() && space.HasPermission(Permission.View);
         <tr class="@(space.IsArchived() ? "table-archived" : "") @(space.IsTrashed() ? "table-trashed" : "")" @Html.Raw(visible ? $@"data-href=""{space.Url()}""" : "")>
             <td class="table-icon">@space.AvatarImg(32)</td>

@@ -1,7 +1,7 @@
 ﻿@model FilesModel
 @{
     Title = WeavyContext.App.Name;
-    Layout = "~/Views/Shared/_DopLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 <nav class="navbar navbar-light navbar-files sticky-top">
@@ -68,5 +68,10 @@
         Html.RenderPartial("_MoveModal");
         Html.RenderPartial("_OfficeModal");
         Html.RenderPartial("_ShareModal");
+    }
+}
+@section navbar_bottom {
+    @{
+        Html.RenderPartial("_HubNavBar");
     }
 }

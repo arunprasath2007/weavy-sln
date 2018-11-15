@@ -1,0 +1,4 @@
+﻿<nav class="nav nav-tabs dop-nav-tabs">
+    <a class="nav-link dop-nav-link @ViewContext.RouteData.IsActiveTab("Index", "Hub")" href="@(Url.Action<HubController>(c => c.Index(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Channel</span></a>
+    <a class="nav-link dop-nav-link @ViewContext.RouteData.IsActiveTab("Files", "Hub")" href="@(Url.Action<HubController>(c => c.Files(null)))">@Html.SvgIcon("dop-hub", "dop-dark") <span>Files</span></a>
+</nav>

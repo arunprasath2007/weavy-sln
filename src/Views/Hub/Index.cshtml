@@ -1,13 +1,13 @@
 ﻿@model PostsModel
 @{
     Title = Model.Space.Name;
-    Layout = "~/Views/Shared/_DopLayout.cshtml";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @section navbar_left {
-<div class="navbar-icons">
-    <a class="btn btn-icon d-standalone" href="@WeavyContext.ApplicationPath">@Html.IconImg(24)</a>
-</div>
+    <div class="navbar-icons">
+        <a class="btn btn-icon d-standalone" href="@WeavyContext.ApplicationPath">@Html.IconImg(24)</a>
+    </div>
 
 }
 
@@ -63,5 +63,11 @@
         Html.RenderPartial("_EditPostModal");
         Html.RenderPartial("_MovePostModal");
         Html.RenderPartial("_EditCommentModal");
+    }
+}
+
+@section navbar_bottom {
+    @{
+        Html.RenderPartial("_HubNavBar");
     }
 }

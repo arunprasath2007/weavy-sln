@@ -40,13 +40,13 @@
         <a href="@(Url.Action<SpaceController>(c=>c.Members(WeavyContext.Space.Id, null, null)))">@Model.Members.TotalCount.SingularizeOrPluralize("member", "members")</a>
     </p>
 
-    @if (!WeavyContext.Space.IsMember && SpaceService.HasPendingMembershipRequest(WeavyContext.Space.Id))
-    {
-        <div class="alert alert-info d-flex">
-            @Html.SvgIcon("information", size: 36, htmlAttributes: new { @class = "align-self-start flex-noscale mt-1 mr-2" })
-            <span>Your membership request is waiting for approval.</span>
-        </div>
-    }
+    <form class="card card-weavy-editor post-form" action="@(Url.Action<PostController>(c => c.Insert(ConfigurationConstants.DOP_GLOBAL_POSTS_APP_ID, null)))" method="post">
+        <textarea id="text" class="form-control" name="text" data-editor-location="discuss"></textarea>
+        <input type="hidden" name="hasContext" id="hasContext" value="true" />
+        <input type="hidden" name="contextUrl" id="contextUrl" />
+        <input type="hidden" name="contextTitle" id="contextTitle" />
+        <div class="post-backdrop"></div>
+    </form>
 
     @if (WeavyContext.Space.HasPermission(Permission.List))
     {

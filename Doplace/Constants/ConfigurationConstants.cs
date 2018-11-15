@@ -19,5 +19,10 @@ namespace Doplace.Constants
         {
             get { return Convert.ToInt32(ConfigurationManager.AppSettings["dop.global.files-app-id"]); }
         }
+
+        public static int DOP_GLOBAL_POSTS_APP_ID
+        {
+            get { return Convert.ToInt32(ConfigurationManager.AppSettings["dop.global.posts-app-id"]); }
+        }
     }
 }

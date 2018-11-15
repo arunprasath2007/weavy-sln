@@ -18,7 +18,7 @@ namespace Wvy.Controllers
         [Route("")]
         public ActionResult Index(Query query = null)
         {
-            var space = GetSpace(ConfigurationConstants.DOP_GLOBAL_SPACE_ID);
+            var app = GetApp(ConfigurationConstants.DOP_GLOBAL_POSTS_APP_ID);
             PostsModel postsModel = new PostsModel();
             postsModel.Members = SpaceService.GetMembers(postsModel.Space.Id, new MemberQuery
             {
@@ -30,7 +30,7 @@ namespace Wvy.Controllers
             {
                 Top = PageSizes[0] / 5
             };
-            postsModel.Posts = PostService.GetPosts(postsModel.Space.Id, query);
+            postsModel.Posts = PostService.GetPosts(app.Id, query);
 
             if (base.Request.IsAjaxRequest())
             {
